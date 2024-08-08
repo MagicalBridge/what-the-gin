@@ -1,31 +1,37 @@
-# Compiled Object files, Static and Dynamic libs (Shared Objects)
-*.o
-*.a
-*.so
-
-# Folders
-_obj
-_test
-
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
-
-*.cgo1.go
-*.cgo2.c
-_cgo_defun.c
-_cgo_gotypes.go
-_cgo_export.*
-
-_testmain.go
-
+# Binaries for programs and plugins
 *.exe
+*.dll
+*.so
+*.dylib
 *.test
-*.prof
-
-# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Temporary files created by Go when building and testing
-*.swp
-*.swo
+# Output of the 'go get' command, which installs dependencies
+/bin
+/pkg
+/mod
+
+# Go module files (Go 1.11+)
+go.sum
+go.work
+
+# If you want to exclude vendor directories:
+vendor/
+
+# Logs and test result files
+*.log
+*.cover
+*.cov
+
+# Dependency directories created by 'dep'
+vendor/
+
+# Build directory created by the 'gox' tool
+_build/
+
+# Project-specific files
+.DS_Store
+.idea/
+*.iml
+.vscode/
+.env

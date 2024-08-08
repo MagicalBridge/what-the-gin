@@ -50,13 +50,13 @@ func VerifyMerkleProof(rootHash []byte, leafHash []byte, proof [][]byte, isLeft 
 }
 
 func VerifyMerkle() string {
-	//
+	// the slice of whitelisted addresses
 	whitelistAddresses := []string{
 		"0x1234567890123456789012345678901234567890",
 		"0x2345678901234567890123456789012345678901",
 	}
 
-	// Create leaf nodes
+	// list is a slice of Content items
 	var list []merkletree.Content
 	for _, addr := range whitelistAddresses {
 		list = append(list, Content{x: addr})
