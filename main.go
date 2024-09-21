@@ -27,7 +27,14 @@ func getBalance(c *gin.Context) {
 		"address": address,
 		"balance": balance,
 	})
+}
 
+func generateMnemonic(c *gin.Context) {
+	mnemonic, err := utils.GenerateMnemonic(256)
+	fmt.Println(err)
+	c.JSON(200, gin.H{
+		"mnemonic": mnemonic,
+	})
 }
 
 func main() {
@@ -35,6 +42,7 @@ func main() {
 	r.GET("/hello", sayHello)
 	r.GET("/verifyMerkle", verifyMerkle)
 	r.GET("/balance", getBalance)
+	r.GET("/generateMnemonic", generateMnemonic)
 
 	if err := r.Run(":9090"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
