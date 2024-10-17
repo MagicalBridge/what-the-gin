@@ -37,19 +37,30 @@ func generateMnemonic(c *gin.Context) {
 	})
 }
 
-func generateP2PKHAddress(c *gin.Context) {
-	p2pkh_Address := utils.GenerateP2PKHAddress()
+func generate_btc_legacy_address(c *gin.Context) {
+	publicKey := "02ef67f85c8376cf609a494af8c3a043df98211dec573cf1b0eb17304439cab90d"
+	legacy_address, err := utils.Generate_btc_legacy_address(publicKey)
+	fmt.Println(err)
 	c.JSON(200, gin.H{
-		"p2pkh_Address": p2pkh_Address,
+		"legacy_address": legacy_address, // 1CzkhKbqwmDL4o8StBdttLNesLpDZpddmA
 	})
 }
 
-func generateP2SHAddress(c *gin.Context) {
-	p2sh_Address, err := utils.GenerateP2SHAddress("02ef67f85c8376cf609a494af8c3a043df98211dec573cf1b0eb17304439cab90d")
+func generate_btc_nested_sigwit_address(c *gin.Context) {
+	publicKey := "03156348ed9b36ea17115fa9eb05b58151847b8c96ce1ce78bd000cd620a0ca73c"
+	nested_sigwit_address, err := utils.GenerateNestedSigwitddress(publicKey)
 	fmt.Println(err)
-
 	c.JSON(200, gin.H{
-		"p2sh_Address": p2sh_Address,
+		"nested_sigwit_address": nested_sigwit_address, // 38s6gqg48tCkuGPSBzAcYphMkRofxf5M5K
+	})
+}
+
+func generate_btc_native_sigwit_address(c *gin.Context) {
+	publicKey := "02944695f65c4d602054f3260a0926a19b1f2941ffec043faa8144f60ccdef4646"
+	nested_sigwit_address, err := utils.GenerateNativeSegWitAddress(publicKey)
+	fmt.Println(err)
+	c.JSON(200, gin.H{
+		"nested_sigwit_address": nested_sigwit_address, //
 	})
 }
 
@@ -59,8 +70,9 @@ func main() {
 	r.GET("/verifyMerkle", verifyMerkle)
 	r.GET("/balance", getBalance)
 	r.GET("/generateMnemonic", generateMnemonic)
-	r.GET("/generate_btc_p2pkh_address", generateP2PKHAddress)
-	r.GET("/generate_btc_p2sh_address", generateP2SHAddress)
+	r.GET("/generate_btc_legacy_address", generate_btc_legacy_address)
+	r.GET("/generate_btc_nested_sigwit_address", generate_btc_nested_sigwit_address)
+	r.GET("/generate_btc_native_sigwit_address", generate_btc_native_sigwit_address)
 
 	if err := r.Run(":9090"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)

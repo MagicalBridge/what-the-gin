@@ -7,7 +7,7 @@ import (
 	"golang.org/x/crypto/ripemd160"
 )
 
-func GenerateP2SHAddress(pubKeyHex string) (string, error) {
+func GenerateNestedSigwitddress(pubKeyHex string) (string, error) {
 	// 将公钥的十六进制字符串转成字节数组
 	pubKeyBytes, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
