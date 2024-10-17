@@ -3,8 +3,6 @@ module gin-web
 go 1.22.5
 
 require (
-	github.com/btcsuite/btcd v0.24.2
-	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/cbergoon/merkletree v0.2.0
 	github.com/ethereum/go-ethereum v1.14.7

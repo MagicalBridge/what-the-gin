@@ -60,7 +60,7 @@ func generate_btc_native_sigwit_address(c *gin.Context) {
 	nested_sigwit_address, err := utils.GenerateNativeSegWitAddress(publicKey)
 	fmt.Println(err)
 	c.JSON(200, gin.H{
-		"nested_sigwit_address": nested_sigwit_address, //
+		"nested_sigwit_address": nested_sigwit_address,
 	})
 }
 
