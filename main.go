@@ -13,6 +13,14 @@ func sayHello(c *gin.Context) {
 	})
 }
 
+func renderIndex(context *gin.Context) {
+	context.HTML(200, "index.html", nil)
+}
+
+func renderUser(context *gin.Context) {
+	context.HTML(200, "user/user.html", nil)
+}
+
 func verifyMerkle(c *gin.Context) {
 	address := utils.VerifyMerkle()
 	c.JSON(200, gin.H{
@@ -60,13 +68,22 @@ func generate_btc_native_sigwit_address(c *gin.Context) {
 	nested_sigwit_address, err := utils.GenerateNativeSegWitAddress(publicKey)
 	fmt.Println(err)
 	c.JSON(200, gin.H{
-		"nested_sigwit_address": nested_sigwit_address,
+		"nested_sigwit_address": nested_sigwit_address, // bc1qgdqma0vzwa9ay49h7pcp87nu7velm5fjudhw0t
 	})
 }
 
 func main() {
 	r := gin.Default()
+
+	// 加载模板文件
+	r.LoadHTMLGlob("templates/**/*")
+
+	// 设置全局静态文件目录
+	r.Static("/assets", "./assets")
+
 	r.GET("/hello", sayHello)
+	r.GET("/renderIndex", renderIndex)
+	r.GET("/renderUser", renderUser)
 	r.GET("/verifyMerkle", verifyMerkle)
 	r.GET("/balance", getBalance)
 	r.GET("/generateMnemonic", generateMnemonic)
