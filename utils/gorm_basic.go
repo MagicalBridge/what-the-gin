@@ -77,3 +77,40 @@ func Retrieve(id int) {
 	// 打印相关信息
 	fmt.Println(article)
 }
+
+func Update() {
+	//	获取需要更新的对象
+	article := &Article{}
+
+	if err := DB.First(article, 1).Error; err != nil {
+		log.Fatal(err)
+	}
+
+	//  更新对象字段
+	article.AuthorID = 23
+	article.Likes = 15
+	article.Subject = "GORM 的增删改查的练习"
+
+	// 存储，DB.Save()
+	if err := DB.Save(article).Error; err != nil {
+		log.Fatal(err)
+	}
+
+	// 打印数据
+	fmt.Println(article)
+}
+
+func Delete() {
+	//	获取需要更新的对象
+	article := &Article{}
+
+	if err := DB.First(article, 1).Error; err != nil {
+		log.Fatal(err)
+	}
+
+	// DB.Delete() 删除
+	if err := DB.Delete(article).Error; err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(article)
+}
