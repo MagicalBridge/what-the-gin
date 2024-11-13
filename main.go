@@ -9,7 +9,14 @@ import (
 
 func sayHello(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"message": "hello gin",
+		"message": "hello",
+	})
+}
+
+func initdb(c *gin.Context) {
+	dsn := utils.GormDBConnection()
+	c.JSON(200, gin.H{
+		"message": dsn,
 	})
 }
 
@@ -80,7 +87,7 @@ func main() {
 
 	// 设置全局静态文件目录
 	r.Static("/assets", "./assets")
-
+	r.GET("/initdb", initdb)
 	r.GET("/hello", sayHello)
 	r.GET("/renderIndex", renderIndex)
 	r.GET("/renderUser", renderUser)
