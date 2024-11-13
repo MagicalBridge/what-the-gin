@@ -13,10 +13,24 @@ func sayHello(c *gin.Context) {
 	})
 }
 
-func initdb(c *gin.Context) {
-	dsn := utils.GormDBConnection()
+//func initdb(c *gin.Context) {
+//	dsn := utils.GormDBConnection()
+//	c.JSON(200, gin.H{
+//		"message": dsn,
+//	})
+//}
+
+func createArticle(c *gin.Context) {
+	utils.Create()
 	c.JSON(200, gin.H{
-		"message": dsn,
+		"message": "写入数据成功",
+	})
+}
+
+func retrieveArticle(c *gin.Context) {
+	utils.Retrieve(1)
+	c.JSON(200, gin.H{
+		"message": "获取数据成功",
 	})
 }
 
@@ -87,7 +101,10 @@ func main() {
 
 	// 设置全局静态文件目录
 	r.Static("/assets", "./assets")
-	r.GET("/initdb", initdb)
+	//r.GET("/initDB", initdb)
+	r.GET("/createArticle", createArticle)
+	r.GET("/retrieveArticle", retrieveArticle)
+
 	r.GET("/hello", sayHello)
 	r.GET("/renderIndex", renderIndex)
 	r.GET("/renderUser", renderUser)

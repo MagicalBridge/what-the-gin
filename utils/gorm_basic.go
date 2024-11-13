@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
 	"time"
 )
 
@@ -18,19 +19,61 @@ type Article struct {
 	AuthorID    uint
 }
 
-func GormDBConnection() string {
+//func GormDBConnection() {
+//	// MySQL 数据库连接配置
+//	dsn := "root:cpf@1234@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"
+//	// 创建数据库连接池
+//	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+//	if err != nil {
+//		fmt.Printf("Failed to connect to database: %v", err)
+//	}
+//
+//	// 基于模型完成表结构的迁移和定义
+//	err = db.AutoMigrate(&Article{})
+//	if err != nil {
+//		fmt.Printf("Failed to migrate table: %v", err)
+//	}
+//}
+
+var DB *gorm.DB
+
+func init() {
 	// MySQL 数据库连接配置
-	dsn := "root:cpf@1234@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"
+	const dsn = "root:cpf@1234@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"
 	// 创建数据库连接池
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Printf("Failed to connect to database: %v", err)
 	}
+	DB = db
+}
 
-	// 基于模型完成表结构的迁移和定义
-	err = db.AutoMigrate(&Article{})
-	if err != nil {
-		fmt.Printf("Failed to migrate table: %v", err)
+// Create 插入数据的操作演示
+func Create() {
+	//	构建Article类型的数据
+	article := &Article{
+		Subject:     "GORM 基础的增删改查的操作",
+		Likes:       0,
+		Published:   true,
+		PublishTime: time.Now(),
+		AuthorID:    42,
 	}
-	return dsn
+
+	//	DB.Create 完成数据库的 insert 操作
+	if err := DB.Create(article).Error; err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Retrieve 查询的数据代码演示
+func Retrieve(id int) {
+	//	初始化Article模型 零值
+	article := &Article{}
+
+	//	DB.first
+	if err := DB.First(article, id).Error; err != nil {
+		log.Fatal(err)
+	}
+	// 打印相关信息
+	fmt.Println(article)
 }
