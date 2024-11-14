@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"time"
 )
 
+// Article gorm 中表名约定的映射：小写 + 下划线 复数的形式，比较厉害的是，会按照英文语法去变成复数形式，而不是直接暴力的直接加s
 type Article struct {
 	//	嵌入基础模型
 	gorm.Model
@@ -41,7 +43,10 @@ func init() {
 	// MySQL 数据库连接配置
 	const dsn = "root:cpf@1234@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"
 	// 创建数据库连接池
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		//	设置日志的级别 设置为info级别
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		fmt.Printf("Failed to connect to database: %v", err)
 	}
