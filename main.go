@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"gin-web/utils"
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func sayHello(c *gin.Context) {
