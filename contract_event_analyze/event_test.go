@@ -11,17 +11,16 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
-/*
- *  txReceipt, logs
- *  getLogs    logs
- */
-
+// 定义了合约事件的ABI
 const ConfirmDataStoreEventABI = "ConfirmDataStore(uint32,bytes32)"
 
+// 计算合约事件的ABI哈希
 var ConfirmDataStoreEventABIHash = crypto.Keccak256Hash([]byte(ConfirmDataStoreEventABI))
 
+// 定义了合约地址
 const DataLayrServiceManagerAddr = "0x5BD63a7ECc13b955C4F57e3F12A64c10263C14c1"
 
+// 测试获取交易收据
 func TestEthClient_GetTxReceiptByHash(t *testing.T) {
 	fmt.Println("test start for tx receipt")
 	clint, err := NewEthClient("https://rpc.mevblocker.io")
@@ -54,9 +53,10 @@ func TestEthClient_GetTxReceiptByHash(t *testing.T) {
 		},
 	}
 	var dataStoreData = make(map[string]interface{})
+
 	for _, rLog := range txReceipt.Logs {
 		fmt.Println("address====", rLog.Address.String())
-		if strings.ToLower(rLog.Address.String()) != strings.ToLower(DataLayrServiceManagerAddr) {
+		if !strings.EqualFold(rLog.Address.String(), DataLayrServiceManagerAddr) {
 			continue
 		}
 		if rLog.Topics[0] != ConfirmDataStoreEventABIHash {
@@ -68,11 +68,9 @@ func TestEthClient_GetTxReceiptByHash(t *testing.T) {
 				fmt.Println("unpack data into mapping fail", err)
 				continue
 			}
-
-			if dataStoreData != nil {
-				fmt.Println("dataStoreId====", dataStoreData["dataStoreId"].(uint32))
-				fmt.Println("dataStoreId====", dataStoreData["headerHash"])
-			}
+			fmt.Println("dataStoreId====", dataStoreData["dataStoreId"].(uint32))
+			headerHashBytes := dataStoreData["headerHash"].([32]byte)
+			fmt.Println("headerHash====", common.Bytes2Hex(headerHashBytes[:]))
 		}
 	}
 }
@@ -115,9 +113,10 @@ func TestEthClient_GetLogs(t *testing.T) {
 		},
 	}
 	var dataStoreData = make(map[string]interface{})
+
 	for _, rLog := range logList {
 		fmt.Println(rLog.Address.String())
-		if strings.ToLower(rLog.Address.String()) != strings.ToLower(DataLayrServiceManagerAddr) {
+		if !strings.EqualFold(rLog.Address.String(), DataLayrServiceManagerAddr) {
 			continue
 		}
 		if rLog.Topics[0] != ConfirmDataStoreEventABIHash {
@@ -129,12 +128,11 @@ func TestEthClient_GetLogs(t *testing.T) {
 				fmt.Println("Unpack data into map fail", "err", err)
 				continue
 			}
-			if dataStoreData != nil {
-				dataStoreId := dataStoreData["dataStoreId"].(uint32)
-				headerHash := dataStoreData["headerHash"]
-				fmt.Println(dataStoreId)
-				fmt.Println(headerHash)
-			}
+			dataStoreId := dataStoreData["dataStoreId"].(uint32)
+			headerHash := dataStoreData["headerHash"]
+			fmt.Println("dataStoreId====", dataStoreId)
+			headerHashBytes := headerHash.([32]byte)
+			fmt.Println("headerHash====", common.Bytes2Hex(headerHashBytes[:]))
 			return
 		}
 	}
